@@ -2,12 +2,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/login'
-// import Login from '../views/login/index'
+import Home from '@/views/home'
+// import Home from '../views/home/index'
 // 注册
 Vue.use(VueRouter)
 const router = new VueRouter({
   routes: [
-    { name: 'login', path: '/login', component: Login }
+    { name: 'login', path: '/login', component: Login },
+    { name: 'home', path: '/', component: Home }
   ]
 })
 
