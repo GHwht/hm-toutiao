@@ -14,7 +14,17 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 2. 在使用vue-cli的时候 @ 符号在路径中作为前缀使用的时候 代表src目录
 import router from '@/router'
 
+import axios from 'axios'
+Vue.prototype.$http = axios
+
 Vue.use(ELEMENTUI)
+
+// 全局自动获取焦点
+Vue.directive('focus', {
+  inserted (el) {
+    el.focus()
+  }
+})
 
 Vue.config.productionTip = false
 
