@@ -2,22 +2,22 @@
     <div class="login-container">
         <el-card class="login-box">
             <img src="../../assets/images/logo_index.png" alt="">
-            <el-form ref="ruleForm" :rules="rules" :model="loginForm" >
+            <el-form ref="ruleForm" :status-icon="true" :rules="rules" :model="loginForm" >
                 <el-form-item prop="mobile">
                     <el-input ref="mobile" type="text" v-model="loginForm.mobile"></el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                    <el-input class="login-yzk" type="text" v-model="loginForm.code"></el-input>
-                    <el-button class="login-yzm" type="primary">发送验证码</el-button>
+                <el-form-item prop="code" style="margin-bottom:16px">
+                    <el-input style="width:240px" type="text" v-model="loginForm.code"></el-input>
+                    <el-button class="login-yzm" style="float:right">发送验证码</el-button>
                 </el-form-item>
                 <el-form-item class="login-xy">
-                    <el-checkbox style="float:left" name="type">
-                        <p>
-                            我已阅读并同意
-                            <a href="#">用户协议</a>
-                            和
-                            <a href="#">隐私条框</a>
-                        </p>
+                    <el-checkbox :value="true" style="float:left" name="type">
+                    <p>
+                        我已阅读并同意
+                        <a href="#">用户协议</a>
+                        和
+                        <a href="#">隐私条框</a>
+                    </p>
                     </el-checkbox>
                 </el-form-item>
                 <el-form-item class="login-btn">
@@ -31,6 +31,15 @@
 <script>
 export default {
   data () {
+    // 校验手机号
+    const checkMobile = (rule, value, callback) => {
+      // 校验逻辑   把value拿出来进行手机号的格式校验
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('手机号格式不正确'))
+      }
+    }
     return {
       checked: true,
       loginForm: {
@@ -40,16 +49,18 @@ export default {
       rules: {
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
-          { min: 3, max: 13, message: '长度在 13 个字符', trigger: 'blur' }
+          { validator: checkMobile, message: '请输入正确的手机号', trigger: 'blur' }
         ],
         code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { len: 6, message: '请输入6位数字', trigger: 'blur' }
         ]
       }
     }
   },
   mounted () {
     this.$refs.mobile.focus()
+    console.log(this.checked)
   },
   methods: {
     submitForm (ruleForm) {
@@ -89,7 +100,7 @@ export default {
             position: relative;
             // opacity: 0.2;
             border: transparent;
-            text-align: center;
+            // text-align: center;
             background-color: rgba(255, 255, 255, 0.622);
             width: 410px;
             height: 340px;
@@ -98,9 +109,11 @@ export default {
             top: 50%;
             transform: translate(-50%,-50%);
             img {
-                // position: absolute;
+                display: block;
                 width: 250px;
                 height: 55px;
+                margin: 15px auto;
+                margin-top: 0px;
             };
             .login-yzk {
                 width: 230px;
@@ -109,13 +122,15 @@ export default {
             .login-yzm {
                 padding: 12px, 14px;
                 float: right;
-                width: 116px;
                 text-align: center;
             }
             .login-xy {
                 color: #999;
                 a {
                     color: rgb(8, 169, 243);
+                }
+                p {
+                  color: #999;
                 }
             }
         }

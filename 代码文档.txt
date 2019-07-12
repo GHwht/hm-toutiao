@@ -13,47 +13,47 @@
             >
                 <el-menu-item index="1">
                 <i class="el-icon-s-home"></i>
-                <span slot="title">é¦–é¡µ</span>
+                <span slot="title">Ê×Ò³</span>
                 </el-menu-item>
                 <el-menu-item index="2">
                 <i class="el-icon-document"></i>
-                <span slot="title">å†…å®¹ç®¡ç†</span>
+                <span slot="title">ÄÚÈİ¹ÜÀí</span>
                 </el-menu-item>
                 <el-menu-item index="3">
                 <i class="el-icon-picture"></i>
-                <span slot="title">ç´ æç®¡ç†</span>
+                <span slot="title">ËØ²Ä¹ÜÀí</span>
                 </el-menu-item>
                 <el-menu-item index="4">
                 <i class="el-icon-s-promotion"></i>
-                <span slot="title">å‘å¸ƒæ–‡ç« </span>
+                <span slot="title">·¢²¼ÎÄÕÂ</span>
                 </el-menu-item>
                 <el-menu-item index="5">
                 <i class="el-icon-chat-dot-round"></i>
-                <span slot="title">è¯„è®ºç®¡ç†</span>
+                <span slot="title">ÆÀÂÛ¹ÜÀí</span>
                 </el-menu-item>
                 <el-menu-item index="6">
                 <i class="el-icon-present"></i>
-                <span slot="title">ç²‰ä¸ç®¡ç†</span>
+                <span slot="title">·ÛË¿¹ÜÀí</span>
                 </el-menu-item>
                 <el-menu-item index="7">
                 <i class="el-icon-setting"></i>
-                <span slot="title">ä¸ªäººè®¾ç½®</span>
+                <span slot="title">¸öÈËÉèÖÃ</span>
                 </el-menu-item>
             </el-menu>
         </el-aside>
         <el-container>
             <el-header class="home-header">
                 <span class="el-icon-s-fold" @click="toggleMenu()"></span>
-                <span class="text">æ±Ÿè‹ä¼ æ™ºæ’­å®¢ç§‘æŠ€æ•™è‚²æœ‰é™å…¬å¸</span>
+                <span class="text">½­ËÕ´«ÖÇ²¥¿Í¿Æ¼¼½ÌÓıÓĞÏŞ¹«Ë¾</span>
                 <el-dropdown  style="float:right">
                     <span class="el-dropdown-link">
                         <img style="vertical-align: middle" width="48px" height="35px" src="../../assets/images/timg.jpg" alt="">
-                        <b style="vertical-align: middle; padding-left:8px">é»‘é©¬å°å“¥</b>
+                        <b style="vertical-align: middle; padding-left:8px">ºÚÂíĞ¡¸ç</b>
                         <i style="vertical-align: middle"  class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-setting">ä¸ªäººè®¾ç½®</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-unlock">é€€å‡ºç™»å½•</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-setting">¸öÈËÉèÖÃ</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-unlock">ÍË³öµÇÂ¼</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-header>
@@ -100,26 +100,18 @@ export default {
         .home-header {
             border-bottom: 1px solid #ddd;
             line-height: 60px;
-            color: #555;
             .el-icon-s-fold {
                 vertical-align: middle;
                 font-size: 24px;
             }
             .text {
                 vertical-align: middle;
-                padding-left: 4px;
+                padding-left: 10px;
             }
         }
         .home-main {
             background: url(../../assets/images/404.png) no-repeat center /cover;
         }
-    }
-    .el-dropdown-link {
-        cursor: pointer;
-        color: #409EFF;
-    }
-    .el-icon-arrow-down {
-        font-size: 12px;
     }
 
 </style>
