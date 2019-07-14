@@ -1,138 +1,122 @@
 <template>
-    <div class="login-container">
-        <el-card class="login-box">
-            <img src="../../assets/images/logo_index.png" alt="">
-            <el-form ref="ruleForm" :status-icon="true" :rules="rules" :model="loginForm" >
-                <el-form-item prop="mobile">
-                    <el-input ref="mobile" type="text" v-model="loginForm.mobile"></el-input>
-                </el-form-item>
-                <el-form-item prop="code" style="margin-bottom:16px">
-                    <el-input style="width:240px" type="text" v-model="loginForm.code"></el-input>
-                    <el-button class="login-yzm" style="float:right">发送验证码</el-button>
-                </el-form-item>
-                <el-form-item class="login-xy">
-                    <el-checkbox :value="true" style="float:left" name="type">
-                    <p>
-                        我已阅读并同意
-                        <a href="#">用户协议</a>
-                        和
-                        <a href="#">隐私条框</a>
-                    </p>
-                    </el-checkbox>
-                </el-form-item>
-                <el-form-item class="login-btn">
-                    <el-button style="width:100%" @click="submitForm('ruleForm')" type="primary">登录</el-button>
-                </el-form-item>
-            </el-form>
-        </el-card>
-    </div>
+<div class="loign-container">
+  <el-card class="login-card">
+      <div class="login-logo" style="text-align:center; margin-bottom:20px">
+        <img src="../../assets/images/logo_admin.png" alt="">
+      </div>
+      <el-form style="opacity: 0.72" ref="loginForm" :rules="loginRules" :model="loginForm">
+        <el-form-item prop="mobile" style="width:380px">
+          <el-input v-model="loginForm.mobile"></el-input>
+        </el-form-item>
+        <el-form-item prop="code" style="width:100%">
+          <el-input style="width:240px" v-model="loginForm.code"></el-input>
+          <el-button style="float:right">发送验证码</el-button>
+        </el-form-item>
+        <el-form-item class="login-xy">
+          <el-checkbox :value="checked">
+            <p>
+              我已阅读并同意
+              <a href="#">用户协议</a>
+              和
+              <a href="#">隐私条框</a>
+            </p>
+          </el-checkbox>
+        </el-form-item>
+        <el-form-item style="width:380px; margin-top:-10px">
+          <el-button style="width:380px;" @click="onSubmit" type="primary">登录</el-button>
+        </el-form-item>
+    </el-form>
+  </el-card>
+</div>
 </template>
 
 <script>
 export default {
   data () {
-    // 校验手机号
     const checkMobile = (rule, value, callback) => {
-      // 校验逻辑   把value拿出来进行手机号的格式校验
       if (/^1[3-9]\d{9}$/.test(value)) {
         callback()
       } else {
-        callback(new Error('手机号格式不正确'))
+        callback(new Error('手机格式不正确'))
       }
     }
     return {
-      checked: true,
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
-      rules: {
+      checked: true,
+      loginRules: {
         mobile: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { validator: checkMobile, message: '请输入正确的手机号', trigger: 'blur' }
+          { required: true, message: '请输入手机号活动名称', trigger: 'blur' },
+          { validator: checkMobile, trigger: 'blur' }
         ],
         code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
-          { len: 6, message: '请输入6位数字', trigger: 'blur' }
+          { len: 6, message: '验证码必须为6位', trigger: 'blur' }
         ]
       }
     }
   },
-  mounted () {
-    this.$refs.mobile.focus()
-    console.log(this.checked)
-  },
   methods: {
-    submitForm (ruleForm) {
-      this.$refs[ruleForm].validate((valid) => {
+    onSubmit () {
+      // // 调用组件提供的函数 实现整体效验
+      // this.$refs.loginForm.validate(valid => {
+      //   // 发送ajax请求
+      //   this.$http.post('authorizations', this.loginForm).then((res) => {
+      //     console.log(res.data)
+      //     // ajax请求 发送成功后 设置token值
+      //     window.sessionStorage.setItem('hm-toutiao', JSON.stringify(res.data.data))
+      //     // 编程式导航 跳转到首页
+      //     this.$router.push('/')
+      //   })
+      // })
+      // 使用 async await 发送请求
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
-          this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
-            .then((res) => {
-              console.log(res)
-              console.log(this.loginForm)
-              // 编程式导航
-              this.$router.push('/')
-            })
-            .catch(() => {
-              console.log('登录失败')
-              this.$message.error('手机号或验证码错误')
-            })
+          try {
+            // 使用await 获取服务器响应的数据
+            const res = await this.$http.post('authorizations', this.loginForm)
+            // 设置token值
+            window.sessionStorage.setItem('hm-toutiao', JSON.stringify(res.data.data))
+            // 跳转到首页
+            this.$router.push('/')
+          } catch (err) {
+            this.$message.error('手机号错误或验证码错误')
+          }
         }
       })
-    },
-    resetForm (ruleForm) {
-      this.$refs[ruleForm].resetFields()
     }
   }
 }
 </script>
 
-<style scoped lang='less'>
-    .login-container{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        // 在容器里全屏显示  背景图定位 / 背景图尺寸 必须连写 在
-        background: url(../../assets/images/1.jpg) no-repeat center /cover;
-        .login-box {
-            position: relative;
-            // opacity: 0.2;
-            border: transparent;
-            // text-align: center;
-            background-color: rgba(255, 255, 255, 0.622);
-            width: 410px;
-            height: 340px;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            img {
-                display: block;
-                width: 250px;
-                height: 55px;
-                margin: 15px auto;
-                margin-top: 0px;
-            };
-            .login-yzk {
-                width: 230px;
-                float: left;
-            }
-            .login-yzm {
-                padding: 12px, 14px;
-                float: right;
-                text-align: center;
-            }
-            .login-xy {
-                color: #999;
-                a {
-                    color: rgb(8, 169, 243);
-                }
-                p {
-                  color: #999;
-                }
-            }
+<style lang="less" scoped>
+  .loign-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../../assets/images/1.jpg') no-repeat center/cover;
+    .login-card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(57, 127, 219, 0.37);
+      border: none;
+      width: 420px;
+      height: 340px;
+      .login-xy {
+        p {
+          margin-left: -8px;
+          color: #fff;
+          a {
+            color: rgb(0, 17, 255);
+          }
         }
+      }
     }
+  }
 </style>
