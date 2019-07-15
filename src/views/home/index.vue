@@ -5,7 +5,7 @@
         <el-aside :width="collapse?'80px':'200px'" class="home-aside">
             <div style="text-align:center" class="home-logo" :class="{close:collapse}"></div>
              <el-menu
-                default-active="/"
+                :default-active="$route.path"
                 class="el-menu-vertical-demo"
                 background-color="#002033"
                 text-color="#fff"

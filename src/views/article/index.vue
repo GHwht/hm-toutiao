@@ -1,0 +1,190 @@
+<template>
+    <div class="article-container">
+        <!-- 筛选区域 -->
+        <el-card>
+            <div slot="header">
+                <my-bread>内容管理</my-bread>
+            </div>
+            <!-- 筛选表单 -->
+            <el-form v-model="reqParams" label-width="80px">
+                <el-form-item label="状态:">
+                    <el-radio-group v-model="reqParams.status">
+                        <el-radio :label="null">全部</el-radio>
+                        <el-radio :label="0">草稿</el-radio>
+                        <el-radio :label="1">待审核</el-radio>
+                        <el-radio :label="2">审核通过</el-radio>
+                        <el-radio :label="3">审核失败</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
+                <el-form-item label="频道:">
+                    <el-select v-model="reqParams.channel_id">
+                        <el-option v-for="item in channelOptions" :key="item.id" :label="item.name" :value="item.id ">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="日期:">
+                     <el-date-picker
+                        value-format = "yyyy-MM-dd"
+                        @change="changeData"
+                        v-model="dataVualus"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button @click="search()" type="primary">筛选 </el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
+
+        <!-- 搜索结果区域 -->
+        <el-card>
+            <div slot="header">
+                根据筛选条件共查询到
+                <b>
+                 {{total}}
+                </b>
+                条结果 ：
+            </div>
+            <el-table :data="articles" style="width: 100%">
+                <el-table-column label="封面">
+                    <!-- element-ui 提供的作用域插槽 -->
+                    <template slot-scope="scope">
+                        <el-image style="width:100px; height:75px" :src="scope.row.cover.images[0]">
+                            <!-- element-ui 提供的具名插槽 -->
+                            <div slot="error">
+                                <img width="100px" height="75px" src="../../assets/images/error.gif" alt="">
+                            </div>
+                        </el-image>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="title" label="标题">
+                </el-table-column>
+                <el-table-column prop="status" label="状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.status === 0" type="info">草稿</el-tag>
+                        <el-tag v-if="scope.row.status === 1">待审核</el-tag>
+                        <el-tag v-if="scope.row.status === 2" type="success">审核成功</el-tag>
+                        <el-tag v-if="scope.row.status === 3" type="warning">审核失败</el-tag>
+                        <el-tag v-if="scope.row.status === 4" type="danger">已删除</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="pubdate" label="发布时间">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button @click="edit(scope.row.id)" icon="el-icon-edit" plain type="primary" circle></el-button>
+                        <el-button @click="del(scope.row.id)" icon="el-icon-delete" type="danger" plain circle></el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="box">
+                <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="total"
+                    :page-size="reqParams.per_page"
+                    @current-change="pager"
+                    :current-page="reqParams.page"
+                    >
+                </el-pagination>
+            </div>
+        </el-card>
+
+    </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      // 提交给后台的筛选条件
+      reqParams: {
+        // 如果是空 该字段是不会提交给后台的  空字符串还是会提交给后台
+        status: null,
+        channel_id: null,
+        begin_pubdate: null,
+        end_pubdate: null,
+        page: 1,
+        per_page: 10
+      },
+      // 频道的选项数组
+      channelOptions: [],
+      //   日期数据
+      dataVualus: [],
+      //   文章列表数据
+      articles: [],
+      //   总页数
+      total: 0
+    }
+  },
+  methods: {
+    //   修改
+    edit (id) {
+      this.$router.push(`/publish?id=${id}`)
+    },
+    //   删除
+    del (id) {
+      this.$confirm('是否继续删除数据?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await this.$http.delete(`articles/${id}`)
+          this.$message.success('删除成功')
+          this.getArticles()
+        })
+    },
+    pager (newPage) {
+      //   提交当前页码给后台 获取数据
+      this.reqParams.page = newPage
+      this.getArticles()
+    },
+    getArticles: async function () {
+      // 用 async 方式发送请求
+      const { data: { data } } = await this.$http.get('articles', { params: this.reqParams })
+      //   配置数据
+      this.articles = data.results
+      this.total = data.total_count
+      console.log(data)
+    },
+    // 获取 频道数据
+    async getChannelOptions () {
+      // 多重解构获取数据
+      const { data: { data } } = await this.$http.get('channels')
+      this.channelOptions = data.channels
+    },
+    // 选择时间处理函数
+    changeData (values) {
+      this.reqParams.begin_pubdate = values[0]
+      this.reqParams.end_pubdate = values[1]
+      console.log(this.dataVualus)
+    },
+    search () {
+      this.reqParams.page = 1
+      this.getArticles()
+      console.log(this.reqParams)
+    }
+  },
+  created () {
+    this.getArticles()
+    this.getChannelOptions()
+  }
+}
+</script>
+
+<style lang="less" scoped>
+    .el-card {
+        margin-bottom: 20px
+    }
+    .box {
+        text-align: center;
+        margin-top: 15px;
+    }
+</style>

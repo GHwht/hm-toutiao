@@ -11,9 +11,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from '@/router'
 import axios from './api'
 
-Vue.prototype.$http = axios
+import Components from '@/components'
 
 Vue.use(ELEMENTUI)
+Vue.use(Components)
+Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
