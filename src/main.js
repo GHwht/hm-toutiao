@@ -4,6 +4,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import './styles/index.less'
+
 // 导入element-ui
 import ELEMENTUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'

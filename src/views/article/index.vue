@@ -154,8 +154,13 @@ export default {
     },
     // 确认日期选择器 触发事件 保存时间 并赋值
     changeDate (values) {
-      this.reqParams.begin_pubdate = values[0]
-      this.reqParams.end_pubdate = values[1]
+      if (values) {
+        this.reqParams.begin_pubdate = values[0]
+        this.reqParams.end_pubdate = values[1]
+      } else {
+        this.reqParams.begin_pubdate = null
+        this.reqParams.end_pubdate = null
+      }
     },
     // 实现筛选功能 给筛选按钮添加事件
     search () {
