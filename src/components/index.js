@@ -2,6 +2,8 @@
 // 当导入这个模块 使用Vue.use(使用这个模块) Vue会调用install函数 默认传入Vue对象
 
 import MyBread from '@/components/my-bread.vue'
+import MyChannel from '@/components/my-channel.vue'
+import MyChanne from '@/components/aaa.vue'
 
 export default {
   install (Vue) {
@@ -9,6 +11,8 @@ export default {
     // 进行组件的注册
     // Vue.component('aaa', MyBread)
     Vue.component(MyBread.name, MyBread)
+    Vue.component(MyChannel.name, MyChannel)
+    Vue.component(MyChanne.name, MyChanne)
 
     // 多个注册注册 就重复写多个就ok了
   }
