@@ -76,6 +76,8 @@
 </template>
 
 <script>
+// 引入eventBus
+import eventBus from '@/eventBus'
 export default {
   data () {
     return {
@@ -100,6 +102,18 @@ export default {
     const user = JSON.parse(window.sessionStorage.getItem('hm-toutiao'))
     this.avatar = user.photo
     this.name = user.name
+    eventBus.$on('updateHeaderName', (name) => {
+      this.name = name
+    })
+    eventBus.$on('updateHeaderPhoto', (avatar) => {
+      this.avatar = avatar
+    })
+    // 刷新页面时 直接刷新用户头像和用户名
+    eventBus.$on('updateHeader', (data) => {
+      const { photo, name } = data
+      this.name = name
+      this.avatar = photo
+    })
   }
 }
 </script>

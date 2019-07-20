@@ -77,10 +77,12 @@ export default {
           type: 1,
           images: []
         }
-      }
+      },
+      articleId: null
     }
   },
   methods: {
+    // 实现发表功能 或存入草稿功能
     async publish (draft) {
       await this.$http.post(`articles?draft=${draft}`, this.articleForm)
       // draft为true 为存入草稿成功  draft为false 显示发表成功
@@ -88,6 +90,13 @@ export default {
       // 发表成功后 跳转到内容管理
       this.$router.push('/article')
     }
+  },
+  created () {
+    // this.articleId = $route.query
+    console.log(this.$route)
+  },
+  watch: {
+
   }
 }
 </script>
