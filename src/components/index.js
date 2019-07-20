@@ -4,6 +4,7 @@
 import MyBread from '@/components/my-bread.vue'
 import MyChannel from '@/components/my-channel.vue'
 import MyChanne from '@/components/aaa.vue'
+import MyImage from '@/components/my-image.vue'
 
 export default {
   install (Vue) {
@@ -13,6 +14,7 @@ export default {
     Vue.component(MyBread.name, MyBread)
     Vue.component(MyChannel.name, MyChannel)
     Vue.component(MyChanne.name, MyChanne)
+    Vue.component(MyImage.name, MyImage)
 
     // 多个注册注册 就重复写多个就ok了
   }

@@ -88,8 +88,8 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="edit(scope.row.channel_id)" icon="el-icon-edit" plain circle></el-button>
-            <el-button type="danger" @click="del(scope.row.channel_id)" icon="el-icon-delete" plain circle></el-button>
+            <el-button type="primary" @click="edit(scope.row.id)" icon="el-icon-edit" plain circle></el-button>
+            <el-button type="danger" @click="del(scope.row.id)" icon="el-icon-delete" plain circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -150,7 +150,8 @@ export default {
     },
     // 编辑方法
     edit (id) {
-      this.$router.push(`/publish?${id}`)
+      // console.log(id)
+      this.$router.push(`/publish?id=${id}`)
     },
     // 确认日期选择器 触发事件 保存时间 并赋值
     changeDate (values) {

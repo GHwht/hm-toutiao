@@ -1,4 +1,5 @@
 .avatar-uploader {
+  width: 180px;
   margin: 0 auto;
 }
 .avatar-uploader .el-upload {
@@ -16,11 +17,27 @@
   color: #8c939d;
   width: 178px;
   height: 178px;
-  line-height: 178px;
+  line-height: 178px !important;
   text-align: center;
 }
 .avatar {
   width: 178px;
   height: 178px;
   display: block;
+}
+.publish-container .ql-editor {
+  height: 300px;
+}
+.publish-container .ql-toolbar.ql-snow {
+  padding: 0px 8px;
+}
+.MyImg-container .el-dialog__footer {
+  text-align: center;
+}
+.MyImg-container .el-dialog__body {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+.MyImg-container .el-dialog__header {
+  padding-top: 0px;
 }
