@@ -3,7 +3,7 @@
     <el-card>
       <!-- 头部 -->
       <div slot="header">
-        <my-bread>素材管理</my-bread>
+        <my-bread>{{articleId ? '修改' : '发布'}}文章</my-bread>
       </div>
       <!-- 主体 -->
       <el-form :model="articleForm" label-width="100px">
@@ -35,9 +35,13 @@
         <el-form-item label="频道 :">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item size="small">
+        <el-form-item v-if="!articleId" size="small">
           <el-button type="primary" @click="publish(false)">发表</el-button>
           <el-button @click="publish(false)">存入草稿</el-button>
+        </el-form-item>
+        <el-form-item v-else size="small">
+          <el-button type="primary" @click="edit(false)">修改</el-button>
+          <el-button @click="edit(false)">修改草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -89,14 +93,51 @@ export default {
       this.$message.success(!draft ? '发表成功' : '存入草稿成功')
       // 发表成功后 跳转到内容管理
       this.$router.push('/article')
+    },
+    // 获取当前要修改的数据
+    async getArticles () {
+      this.articleId = this.$route.query.id
+      const { data: { data } } = await this.$http.get(`articles/${this.articleId}?`)
+      console.log(this.articleId)
+      // 将数据赋值
+      this.articleForm = data
+    },
+    // 实现修改功能
+    async edit (draft) {
+      await this.$http.put(`articles/${this.articleId}?draft=${draft}`, this.articleForm)
+      this.$message.success('修改成功')
+      this.$router.push('/article')
     }
   },
   created () {
-    // this.articleId = $route.query
-    console.log(this.$route)
+    // 获取id值
+    this.articleId = this.$route.query.id
+    // 判断是否有id 有id值 说明是修改状态 调用获取文章数据的方法
+    if (this.articleId) {
+      this.getArticles()
+    }
   },
   watch: {
-
+    // 监听$route $route变化触发watch事件
+    $route () {
+      // 判断是否有id值
+      if (!this.$route.query.id) {
+        // 没有id值 清空数据
+        this.articleId = null
+        this.articleForm = {
+          title: '',
+          content: '',
+          channel_id: null,
+          cover: {
+            type: 1,
+            images: []
+          }
+        }
+      } else {
+        // 有id值 调用获取文章数据 实现后退功能
+        this.getArticles()
+      }
+    }
   }
 }
 </script>

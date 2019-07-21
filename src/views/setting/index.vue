@@ -71,8 +71,8 @@ export default {
   },
   methods: {
     myUpload (data) {
-    //   console.log(data)
-    // 实例化一个对象
+      console.log(data)
+      // 实例化一个对象
       const formData = new FormData()
       //   将图片添加到实例对象中
       formData.append('photo', data.file)
@@ -103,7 +103,7 @@ export default {
       const { data: { data } } = await this.$http.get('user/profile')
       //   将数据赋值
       this.userForm = data
-      console.log(data)
+      // console.log(data)
       //   const photoUrl = data.photo
       //   如果是公共的账号 有可能别人修改用户信息 本地没有立即刷新  实现点击刷新页面 刷新出别人修改的用户信息
       // 更新home组件的用户信息
